@@ -1,0 +1,5 @@
+{
+  "name": "Clasificador de Sustancias Químicas",
+  "description": "Un juego interactivo para clasificar sustancias químicas como simples o compuestas. Ideal para estudiantes de secundaria para aprender conceptos básicos de química de forma divertida.",
+  "requestFramePermissions": []
+}

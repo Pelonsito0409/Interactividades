@@ -1,0 +1,7 @@
+
+{
+  "name": "Simulación de Formulación Química: Práctica de Nomenclatura",
+  "description": "Una aplicación interactiva para practicar la formulación y nomenclatura de compuestos químicos (Óxidos, Peróxidos, Hidruros, etc.) rellenando una tabla con diferentes sistemas de nomenclatura. El usuario recibe una pista y debe completar las demás. Incluye comprobación de respuestas y puntuación.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}
