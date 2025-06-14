@@ -124,55 +124,63 @@ const App: React.FC = () => {
 
   const totalSlots = currentExercise.steps.length * 2;
 
+  //<!-- <div className="bg-white/25 backdrop-blur-lg shadow-2xl rounded-xl p-6 md:p-10 w-full max-w-4xl"> -->
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-sky-500 to-indigo-700 p-4 text-white select-none">
-      <div className="bg-white/25 backdrop-blur-lg shadow-2xl rounded-xl p-6 md:p-10 w-full max-w-4xl">
-        <h1 className="text-3xl md:text-4xl font-bold text-center mb-4 text-yellow-300">Práctica de Factores de Conversión</h1>
-        <p className="text-center text-sky-100 mb-6 md:mb-8 text-sm md:text-base">
-          El objetivo de esta práctica es ayudarte a dominar la conversión de unidades de velocidad (m/s a km/h y viceversa) utilizando factores de conversión. Completa los espacios en blanco para construir la cadena de conversión correcta.
-        </p>
-        
-        <ExerciseDisplay
-          exercise={currentExercise}
-          userAnswers={userAnswers}
-          onSlotClick={handleSlotClick}
-          getOptionText={getOptionTextById}
-          getCorrectOptionTextForSlot={getCorrectOptionTextForSlot}
-          isSubmitted={isSubmitted}
-          isCorrect={isSlotCorrect}
-        />
+    <div className="flex flex-col items-center justify-center min-h-screen bg-neutral-900 p-4 text-white select-none">
+      
+      <div className="enmarcado text-white rounded-xl p-8 w-full max-w-4xl rounded-[10px] ">
+        <div className="bg-white/10 backdrop-blur-xl rounded-xl p-8 rounded-xl rounded-[10px]">
 
-        {activeSlotId && !isSubmitted && (
-          <OptionSelectorPanel
-            options={getActiveSlotOptions()}
-            onSelectOption={handleSelectOption}
-            onClose={() => setActiveSlotId(null)}
+          <h1 className="text-3xl md:text-4xl font-bold text-center mb-4 text-yellow-300">
+            Práctica de Factores de Conversión
+            </h1>
+          <p className="text-center text-sky-100 mb-6 md:mb-8 text-sm md:text-base">
+            El objetivo de esta práctica es ayudarte a dominar la conversión de unidades de velocidad (m/s a km/h y viceversa) utilizando factores de conversión. Completa los espacios en blanco para construir la cadena de conversión correcta.
+          </p>
+          
+          <ExerciseDisplay
+            exercise={currentExercise}
+            userAnswers={userAnswers}
+            onSlotClick={handleSlotClick}
+            getOptionText={getOptionTextById}
+            getCorrectOptionTextForSlot={getCorrectOptionTextForSlot}
+            isSubmitted={isSubmitted}
+            isCorrect={isSlotCorrect}
           />
-        )}
 
-        {isSubmitted && (
-          <ResultsDisplay score={score} totalQuestions={totalSlots} />
-        )}
-
-        <div className="mt-8 flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
-          {!isSubmitted ? (
-            <button
-              onClick={handleSubmit}
-              className="px-8 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-150 ease-in-out transform hover:scale-105 w-full sm:w-auto text-lg"
-              disabled={Object.values(userAnswers).filter(Boolean).length < totalSlots}
-              aria-label="Comprobar respuestas del ejercicio actual"
-            >
-              Comprobar Respuestas
-            </button>
-          ) : (
-            <button
-              onClick={loadNextExercise}
-              className="px-8 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-150 ease-in-out transform hover:scale-105 w-full sm:w-auto text-lg"
-              aria-label="Cargar siguiente ejercicio"
-            >
-              Siguiente Ejercicio
-            </button>
+          {activeSlotId && !isSubmitted && (
+            <OptionSelectorPanel
+              options={getActiveSlotOptions()}
+              onSelectOption={handleSelectOption}
+              onClose={() => setActiveSlotId(null)}
+            />
           )}
+
+          {isSubmitted && (
+            <ResultsDisplay score={score} totalQuestions={totalSlots} />
+          )}
+
+          <div className="mt-8 flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
+            {!isSubmitted ? (
+              <button
+                onClick={handleSubmit}
+                className="px-8 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-150 ease-in-out transform hover:scale-105 w-full sm:w-auto text-lg"
+                disabled={Object.values(userAnswers).filter(Boolean).length < totalSlots}
+                aria-label="Comprobar respuestas del ejercicio actual"
+              >
+                Comprobar Respuestas
+              </button>
+            ) : (
+              <button
+                onClick={loadNextExercise}
+                className="px-8 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-150 ease-in-out transform hover:scale-105 w-full sm:w-auto text-lg"
+                aria-label="Cargar siguiente ejercicio"
+              >
+                Siguiente Ejercicio
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

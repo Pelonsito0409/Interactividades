@@ -1,0 +1,42 @@
+.enmarcado {
+  position: relative;
+  z-index: 0;
+  border-radius: 10px;
+  /* overflow: hidden; Esto asegura que el borde no sobresalga */
+  padding: 0px !important;
+}
+.enmarcado > div {
+    background-color: #0965bb;
+    padding: 2rem;
+}
+/* Custom property para animación */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.enmarcado::before,
+.enmarcado::after {
+  content: '';
+  position: absolute;
+  inset: -2px; /* Expandido para envolver el borde */
+  background-image: conic-gradient(from var(--angle), #ff4545, #00ff99, #006aff, #ff0095, #ff4545);
+  border-radius: inherit;
+  z-index: -1;
+  animation: spin 3s linear infinite;
+}
+
+.enmarcado::before {
+  filter: blur(2.5rem);
+  opacity: 0.8;
+}
+
+@keyframes spin {
+  from {
+    --angle: 0deg;
+  }
+  to {
+    --angle: 360deg;
+  }
+}
