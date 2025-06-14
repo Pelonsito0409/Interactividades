@@ -1,0 +1,6 @@
+{
+  "name": "Simulación Interactiva de Estados de la Materia",
+  "description": "Una aplicación React que demuestra visualmente las transiciones de fase de diversas sustancias (sólido, líquido, gas, plasma) a medida que se añade o elimina calor. Incluye un termómetro, visualizador de sustancias y un gráfico de temperatura vs. tiempo.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}

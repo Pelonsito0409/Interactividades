@@ -1,0 +1,7 @@
+
+{
+  "name": "Simulación Interactiva de las Leyes de los Gases",
+  "description": "Una aplicación React y Tailwind CSS que demuestra el comportamiento de los gases. Ajusta temperatura, volumen, y cantidad de sustancia y observa los cambios en la presión. Bloquea una variable (Temperatura, Volumen o Presión) a la vez para explorar diferentes relaciones y observar mensajes relacionados con las Leyes de Boyle, Gay-Lussac o Charles.",
+  "requestFramePermissions": [],
+  "prompt": "Esta aplicación es una simulación interactiva del comportamiento de los gases. Permite a los usuarios manipular variables como temperatura, volumen y cantidad de sustancia para observar cambios en la presión y el movimiento de las partículas. Los usuarios pueden bloquear manualmente una de tres variables (Temperatura, Volumen o Presión) a la vez. Al bloquear Temperatura, se muestra un mensaje sobre la Ley de Boyle. Al bloquear Volumen, un mensaje sobre la Ley de Gay-Lussac. Al bloquear Presión, un mensaje sobre la Ley de Charles (entendiendo que la presión sigue siendo calculada y el mensaje es una guía observacional)."
+}

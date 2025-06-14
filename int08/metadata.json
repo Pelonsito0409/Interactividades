@@ -1,0 +1,7 @@
+
+{
+  "name": "Constructor de Átomos Interactivo",
+  "description": "Un juego educativo interactivo para construir átomos. Los usuarios pueden agregar protones, neutrones y electrones para descubrir elementos, iones e isótopos, y visualizar la estructura atómica incluyendo el núcleo y la configuración electrónica. Diseñado para estudiantes de secundaria.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}

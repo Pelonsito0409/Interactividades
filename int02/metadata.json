@@ -1,0 +1,6 @@
+{
+  "description": "Interactive web application for a high school (3rd year) Physics class to practice the scientific method and understand absolute and relative error through a free-fall experiment. Users can select a height, simulate dropping an object five times, and time the fall. Results are then provided for error calculation and verification.",
+  "prompt": "",
+  "requestFramePermissions": [],
+  "name": "App"
+}

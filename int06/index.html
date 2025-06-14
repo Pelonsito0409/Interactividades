@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-TF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Estación de Análisis de Sustancias</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            bubble: {
+              '0%': { transform: 'translateY(0) scale(0.5)', opacity: '1' },
+              '50%': { transform: 'translateY(-20px) scale(1)', opacity: '0.8' },
+              '100%': { transform: 'translateY(-40px) scale(0.5)', opacity: '0' },
+            },
+            steam: {
+              '0%': { opacity: '0', transform: 'translateY(10px) scale(0.5)' },
+              '50%': { opacity: '0.5', transform: 'translateY(-20px) scale(1)' },
+              '100%': { opacity: '0', transform: 'translateY(-50px) scale(1.5)' },
+            },
+            crystalGrowth: {
+              '0%': { transform: 'scale(0)', opacity: '0' },
+              '100%': { transform: 'scale(1)', opacity: '1' },
+            }
+          },
+          animation: {
+            fadeIn: 'fadeIn 0.5s ease-out',
+            bubble: 'bubble 1.5s infinite ease-in-out',
+            steam: 'steam 2s infinite linear',
+            crystalGrowth: 'crystalGrowth 1s ease-out forwards',
+          }
+        }
+      }
+    }
+  </script>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-slate-900 text-slate-100">
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

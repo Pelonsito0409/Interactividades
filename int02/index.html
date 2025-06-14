@@ -1,0 +1,346 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experimento de Caída Libre</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f4f8;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        #app {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px; /* Increased max-width for better layout */
+            box-sizing: border-box;
+        }
+        .container {
+            display: flex;
+            gap: 25px; /* Increased gap */
+            flex-wrap: wrap; 
+        }
+        .controls {
+            flex: 1;
+            min-width: 300px; /* Adjusted min-width */
+            padding-right: 20px; /* Add some spacing if it wraps under */
+        }
+        .simulation-area {
+            flex: 1.5; /* Give more space to simulation */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Align to top to see drop better */
+            background-color: #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 420px; /* Adjusted to accommodate scaled drop zone */
+            position: relative;
+            overflow: hidden; 
+        }
+        .drop-zone {
+            width: 80%; /* Narrower drop zone for better focus */
+            max-width: 150px;
+            border: 2px dashed #007bff; /* More prominent border */
+            border-radius: 4px;
+            position: relative; 
+            background-color: #f8f9fa;
+            margin-top: 10px; /* Space from title */
+            /* Height is now set by Vue based on visualDropHeight */
+        }
+        .falling-object {
+            width: 24px; /* Slightly smaller */
+            height: 24px;
+            background-color: #dc3545; /* Red for better visibility */
+            border-radius: 50%;
+            position: absolute;
+            top: 0; 
+            left: calc(50% - 12px); 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+        .target {
+            width: 100%;
+            height: 4px;
+            background-color: #28a745; /* Green target */
+            position: absolute;
+            left: 0;
+            z-index: 5;
+             /* bottom position is set by Vue :style */
+        }
+        .ground { /* This is now purely decorative if even needed */
+            width: 100%;
+            height: 10px;
+            background-color: #6c757d;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+        .height-selection {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        .height-selection button {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            color: #495057;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+            font-size: 0.95em;
+        }
+        .height-selection button.selected {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+            font-weight: bold;
+        }
+        .height-selection button:disabled:not(.selected) { /* Style non-selected disabled buttons differently */
+            background-color: #e9ecef;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .action-button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.1em; /* Larger font */
+            transition: background-color 0.2s;
+            width: 100%;
+            margin-top: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .action-button:hover:not(:disabled) {
+            background-color: #218838;
+        }
+        .action-button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .action-button.stop-button { /* Class for 'DETENER EN DIANA' */
+            background-color: #dc3545;
+        }
+        .action-button.stop-button:hover:not(:disabled) {
+            background-color: #c82333;
+        }
+        .reset-button {
+            margin-top: 10px;
+            background-color: #ffc107;
+            color: black;
+        }
+        .reset-button:hover:not(:disabled) {
+            background-color: #e0a800;
+        }
+        .results-table, .verification-area {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #fdfdff; /* Lighter background */
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px; /* Increased padding */
+            text-align: left;
+        }
+        th {
+            background-color: #e9ecef;
+            color: #343a40;
+            font-weight: 600; /* Bolder headers */
+        }
+        .error-message {
+            color: #dc3545;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        h1, h2, h3, h4 {
+            color: #0056b3; 
+            margin-top: 0; /* Remove default top margin for headings inside sections */
+        }
+        h1 { text-align: center; margin-bottom: 10px; } /* Adjusted margin for objective */
+        .practice-objective {
+            text-align: center;
+            font-size: 1.05em;
+            color: #333;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        h2 { margin-bottom: 15px; border-bottom: 2px solid #0056b3; padding-bottom: 5px;}
+        h3 { margin-bottom: 10px; color: #0069d9;}
+        .stopwatch {
+            font-size: 2.2em;
+            color: #007bff;
+            margin: 15px 0;
+            font-weight: bold;
+            text-align: center;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 6px;
+        }
+        .simulation-info {
+             margin-top: 15px;
+             font-size: 0.9em;
+             color: #555;
+             text-align: center;
+        }
+
+        /* Accessibility improvements */
+        [aria-pressed="true"] {
+            font-weight: bold;
+        }
+        button:focus-visible {
+            outline: 2px solid #0056b3;
+            outline-offset: 2px;
+        }
+
+    </style>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <div id="app">
+        <h1>Experimento de Caída Libre Simulado</h1>
+        <p class="practice-objective">Objetivo de la Práctica: Conseguir que el centro de la pelota se detenga exactamente sobre la línea verde (la diana) al pulsar el botón. La aceleración de la pelota es la gravedad de la tierra (9.8 m/s). Después podrá ver el error absoluto y relativo del experimento.</p>
+        
+        <div v-if="errorMessage" class="error-message" role="alert">{{ errorMessage }}</div>
+        
+        <div class="container">
+            <div class="controls">
+                <h2>Configuración y Controles</h2>
+                <div>
+                    <h3 id="height-label">1. Selecciona Altura de Caída Física Total:</h3>
+                    <div class="height-selection" role="group" aria-labelledby="height-label">
+                        <button 
+                            v-for="h in heightOptions" 
+                            :key="h" 
+                            @click="selectHeight(h)"
+                            :class="{ selected: selectedHeight === h }"
+                            :disabled="isHeightLocked && selectedHeight !== h" 
+                            :aria-pressed="selectedHeight === h">
+                            {{ h }} m
+                        </button>
+                    </div>
+                </div>
+
+                <h3>2. Cronómetro:</h3>
+                <div class="stopwatch" aria-live="polite">{{ stopwatch.displayTime }}</div>
+
+                <h3>3. Acción:</h3>
+                <button 
+                    @click="handleActionClick" 
+                    class="action-button"
+                    :class="{ 'stop-button': objectState === 'falling' }"
+                    :disabled="isActionButtonDisabled"
+                    :aria-label="actionButtonAriaLabel"
+                    aria-live="polite">
+                    {{ actionButtonText }}
+                </button>
+
+                <button v-if="experimentStarted" @click="resetExperiment" class="action-button reset-button" aria-label="Reiniciar el experimento completamente. Se perderán todos los datos actuales.">
+                    Reiniciar Experimento Completo
+                </button>
+            </div>
+
+            <div class="simulation-area">
+                <h2>Visualización de la Caída</h2>
+                <div class="drop-zone" :style="{ height: visualDropHeight + 'px' }">
+                    <div ref="fallingObject" class="falling-object" :style="{ visibility: selectedHeight ? 'visible' : 'hidden' }" title="Objeto en caída"></div>
+                    <div v-if="selectedHeight" class="target" :style="{ bottom: targetPositionPx + 'px' }" title="Diana (objetivo visual a mitad de la zona de caída escalada)"></div>
+                    <!-- Ground is implicit at the bottom of the drop-zone -->
+                </div>
+                <div v-if="selectedHeight" class="simulation-info">
+                     Altura física de caída: {{ selectedHeight }}m. <br>
+                     La zona de caída visual está escalada para ocupar el espacio. <br>
+                     Diana ubicada a la mitad de la altura física ({{ (selectedHeight / 2).toFixed(2) }}m).
+                </div>
+                <div v-else class="simulation-info">
+                    Seleccione una altura para iniciar la simulación.
+                </div>
+            </div>
+        </div>
+
+        <div v-if="showResultsTable" class="results-table">
+            <h2>Resultados de los Ensayos</h2>
+            <p>Tiempos medidos para que el objeto alcance la diana (correspondiente a una caída física de {{ (selectedHeight / 2).toFixed(2) }} m).</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ensayo #</th>
+                        <th>Tiempo Medido (s)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="result in measuredTimes" :key="result.trial">
+                        <td>{{ result.trial }}</td>
+                        <td>{{ result.time.toFixed(3) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <button v-if="!showVerificationArea" @click="calculateAndShowVerification" style="margin-top: 15px;" class="action-button">Calcular y Mostrar Verificación</button>
+        </div>
+
+        <div v-if="showVerificationArea" class="verification-area">
+            <h2>Verificación y Análisis de Errores</h2>
+            <p>Altura física de caída hasta la diana: <strong>{{ (selectedHeight / 2).toFixed(2) }} m</strong></p>
+            <p>Tiempo Teórico de Caída a la Diana (calculado con g = {{GRAVITY}} m/s²): <strong>{{ verificationData.trueFallTime.toFixed(3) }} s</strong></p>
+            <p>Promedio de Tiempos Medidos Manualmente: <strong>{{ verificationData.averageMeasuredTime.toFixed(3) }} s</strong></p>
+            
+            <h4>Detalle de Errores por Ensayo:</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ensayo #</th>
+                        <th>Tiempo Medido (s)</th>
+                        <th>Error Absoluto (s)</th>
+                        <th>Error Relativo (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="errorEntry in verificationData.errors" :key="errorEntry.trial">
+                        <td>{{ errorEntry.trial }}</td>
+                        <td>{{ errorEntry.measuredTime.toFixed(3) }}</td>
+                        <td>{{ errorEntry.absoluteError.toFixed(3) }}</td>
+                        <td>{{ errorEntry.relativeError.toFixed(2) }} %</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p><strong>Error Absoluto Promedio:</strong> {{ verificationData.averageAbsoluteError.toFixed(3) }} s</p>
+            <p><strong>Error Relativo Promedio:</strong> {{ verificationData.averageRelativeError.toFixed(2) }} %</p>
+        </div>
+    </div>
+
+    <!-- The script is type="module" so it will be deferred by default -->
+    <script type="module" src="index.tsx"></script>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
