@@ -165,8 +165,10 @@ const App: React.FC = () => {
     switch (quizState) {
       case QuizState.NOT_STARTED:
         return (
-          <div className="text-center flex flex-col items-center justify-center h-[calc(100vh-250px)]"> {/* Adjust height as needed */}
-            <h1 className="text-5xl md:text-6xl font-bold text-sky-400 mb-6">Bienvenido a la Simulación de Formulación Química</h1>
+          <div className="text-center flex flex-col items-center justify-center h-[calc(100vh-250px)] rounded-xl"> {/* Adjust height as needed */}
+            <h1 className="text-4xl md:text-5xl font-bold text-sky-400 mb-6">
+              Bienvenido a la Simulación de Formulación Química
+            </h1>
             <p className="text-xl text-slate-300 mb-10 max-w-2xl">
               Prepárate para poner a prueba tus conocimientos sobre nomenclatura y formulación química.
               Haz clic en "Comenzar" para iniciar un nuevo intento.
@@ -275,7 +277,7 @@ const App: React.FC = () => {
       <div className="enmarcado w-full max-w-7xl">
         {/* This inner div is the main content block, with its own background and rounded corners */}
         <div className="bg-slate-800/80 shadow-xl rounded-xl">
-          <main className="p-6 md:p-8 bg-slate-800">
+          <main className="p-6 md:p-8 bg-slate-800 rounded-xl">
             {renderContent()}
           </main>
         </div>
