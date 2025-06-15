@@ -1,0 +1,6 @@
+{
+  "name": "Explorador Interactivo de Energía",
+  "description": "Una aplicación web para aprender sobre diferentes formas de energía, sus transformaciones y el principio de conservación de la energía a través de escenarios interactivos y pruebas.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}
